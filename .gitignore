@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+.npm-cache/
+.pw-browsers/
+.edge-profile/
+edge-profile/
+.install-tmp/
+.tmp/
+.env
+.env.*
+.DS_Store
+Thumbs.db
