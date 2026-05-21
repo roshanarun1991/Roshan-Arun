@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900">
+  <defs>
+    <linearGradient id="paper" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fffaf6"/>
+      <stop offset="1" stop-color="#f2e7df"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#8a4b22" flood-opacity="0.13"/>
+    </filter>
+  </defs>
+  <rect width="1440" height="900" fill="url(#paper)"/>
+  <rect x="0" y="0" width="1440" height="86" fill="#fffdfb" opacity="0.96"/>
+  <text x="36" y="50" font-family="Georgia, serif" font-size="34" fill="#482414">Mamma Ranta Bageri</text>
+  <text x="36" y="76" font-family="Arial, sans-serif" font-size="13" letter-spacing="6" fill="#8a6d59">AKTA SVENSKA BAKVERK</text>
+  
+  <rect x="0" y="86" width="1440" height="814" fill="#000" opacity="0.54"/>
+  <g opacity="0.44">
+    <rect x="118" y="284" width="290" height="230" rx="16" fill="#fff"/>
+    <rect x="118" y="284" width="290" height="116" rx="16" fill="#9a4b17"/>
+    <rect x="536" y="284" width="290" height="230" rx="16" fill="#fff"/>
+    <rect x="536" y="284" width="290" height="116" rx="16" fill="#c78554"/>
+    <rect x="954" y="284" width="290" height="230" rx="16" fill="#fff"/>
+    <rect x="954" y="284" width="290" height="116" rx="16" fill="#704019"/>
+  </g>
+  <g filter="url(#soft)">
+    <rect x="360" y="58" width="720" height="792" rx="26" fill="#fffdfb"/>
+    <text x="410" y="132" font-family="Georgia, serif" font-size="48" fill="#91470f">Din bestallning</text>
+    <text x="1015" y="118" font-family="Arial, sans-serif" font-size="32" fill="#6d6d6d">x</text>
+    <rect x="410" y="170" width="620" height="160" rx="14" fill="#fbf7f0" stroke="#e7d8c8"/>
+    <text x="432" y="205" font-family="Arial, sans-serif" font-size="17" font-weight="700">Item</text>
+    <text x="742" y="205" font-family="Arial, sans-serif" font-size="17" font-weight="700">Quantity</text>
+    <text x="936" y="205" font-family="Arial, sans-serif" font-size="17" font-weight="700">Total</text>
+    <line x1="430" x2="1010" y1="218" y2="218" stroke="#dfd1c3"/>
+    <text x="432" y="250" font-family="Arial, sans-serif" font-size="19">Kanelbullar</text>
+    <text x="758" y="250" font-family="Arial, sans-serif" font-size="19">-  1  +</text>
+    <text x="914" y="250" font-family="Arial, sans-serif" font-size="19" fill="#91470f">35 SEK</text>
+    <text x="432" y="292" font-family="Arial, sans-serif" font-size="19">Prinsesstarta</text>
+    <text x="758" y="292" font-family="Arial, sans-serif" font-size="19">-  1  +</text>
+    <text x="904" y="292" font-family="Arial, sans-serif" font-size="19" fill="#91470f">285 SEK</text>
+    <text x="810" y="382" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#91470f">Grand total: 464 SEK</text>
+    <text x="410" y="428" font-family="Arial, sans-serif" font-size="18" fill="#6d5f56">Free delivery above 500 kr. Delivery fee is added below 500 kr.</text>
+    
+      <text x="410" y="478" font-family="Arial, sans-serif" font-size="18" font-weight="700">Fullstandigt namn *</text>
+      <rect x="410" y="494" width="620" height="56" rx="10" fill="#fff" stroke="#ddd" stroke-width="2"/>
+      <text x="410" y="564" font-family="Arial, sans-serif" font-size="18" font-weight="700">E-postadress *</text>
+      <rect x="410" y="580" width="620" height="56" rx="10" fill="#fff" stroke="#ddd" stroke-width="2"/>
+      <text x="410" y="650" font-family="Arial, sans-serif" font-size="18" font-weight="700">Telefonnummer *</text>
+      <rect x="410" y="666" width="620" height="56" rx="10" fill="#fff" stroke="#ddd" stroke-width="2"/>
+      <text x="410" y="736" font-family="Arial, sans-serif" font-size="18" font-weight="700">Leveransadress *</text>
+      <rect x="410" y="752" width="620" height="56" rx="10" fill="#fff" stroke="#ddd" stroke-width="2"/>
+      <text x="410" y="822" font-family="Arial, sans-serif" font-size="18" font-weight="700">Leveransdatum *</text>
+      <rect x="410" y="838" width="620" height="56" rx="10" fill="#fff" stroke="#ddd" stroke-width="2"/>
+  </g>
+
+</svg>
