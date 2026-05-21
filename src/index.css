@@ -18,6 +18,7 @@ body,
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 24px;
 }
 
 body {
@@ -45,6 +46,18 @@ img {
   max-width: 100%;
 }
 
+main > section,
+main > footer {
+  scroll-snap-align: start;
+  scroll-margin-top: 24px;
+}
+
+@media (min-width: 768px) {
+  main {
+    scroll-snap-type: y proximity;
+  }
+}
+
 .hero-heading {
   color: #E33529;
   font-family: 'Bayon', Arial, sans-serif;
@@ -56,6 +69,93 @@ img {
 ::selection {
   background: #E33529;
   color: #F3F3E9;
+}
+
+
+.project-browser-image {
+  height: 172%;
+  min-height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  animation: project-preview-scroll 9.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  will-change: transform;
+}
+
+.group\/project:hover .project-browser-image {
+  animation-duration: 6.2s;
+}
+
+.project-browser-image--blog {
+  height: 142%;
+  object-position: top left;
+  animation-name: project-preview-scroll-blog;
+}
+
+.project-browser-image--contain {
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  padding: clamp(14px, 2vw, 28px);
+  animation: project-preview-breathe 7s ease-in-out infinite;
+}
+
+.project-browser-preview::after {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(140deg, rgba(244, 206, 211, 0.18), transparent 36%, rgba(227, 53, 41, 0.07)),
+    radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.35), transparent 28%);
+  opacity: 0.92;
+}
+
+@keyframes project-preview-scroll {
+  0%, 12% {
+    transform: translateY(0) scale(1.018);
+  }
+  48%, 58% {
+    transform: translateY(-42%) scale(1.018);
+  }
+  88%, 100% {
+    transform: translateY(0) scale(1.018);
+  }
+}
+
+@keyframes project-preview-scroll-blog {
+  0%, 14% {
+    transform: translateY(0) scale(1.006);
+  }
+  48%, 58% {
+    transform: translateY(-28%) scale(1.006);
+  }
+  88%, 100% {
+    transform: translateY(0) scale(1.006);
+  }
+}
+
+@keyframes project-preview-breathe {
+  0%, 100% {
+    transform: scale(1.01) translateY(0);
+  }
+  50% {
+    transform: scale(1.035) translateY(-1.2%);
+  }
+}
+
+
+.project-thumb-contain-motion {
+  animation: project-thumb-float 7.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes project-thumb-float {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(0.992);
+  }
+  50% {
+    transform: translate3d(0, -6px, 0) scale(1.012);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

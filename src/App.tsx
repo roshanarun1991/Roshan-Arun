@@ -1,10 +1,12 @@
 ﻿import { ElementType, MouseEvent, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowUpRight, Send } from 'lucide-react';
+import { Send } from 'lucide-react';
 import {
   HTMLMotionProps,
   MotionValue,
   motion,
+  useMotionValue,
   useScroll,
+  useSpring,
   useTransform,
 } from 'framer-motion';
 
@@ -44,6 +46,15 @@ const decorativeImages = {
 const contactEmail = 'roshanarun1@gmail.com';
 const contactPhone = '+46 72 8359978';
 const contactHref = `mailto:${contactEmail}?subject=${encodeURIComponent('Portfolio enquiry for Roshan Arun')}&body=${encodeURIComponent('Hi Roshan,\n\nI would like to talk about a design project.\n\n')}`;
+const aiSeoAuditImage = new URL('./assets/sites/ai-seo-audit.svg', import.meta.url).href;
+const aiSeoPricingImage = new URL('./assets/sites/ai-seo-pricing.svg', import.meta.url).href;
+const aiSeoHeroImage = new URL('./assets/sites/ai-seo-hero.svg', import.meta.url).href;
+const mammaOrderImage = new URL('./assets/sites/mamma-order.svg', import.meta.url).href;
+const mammaAdminImage = new URL('./assets/sites/mamma-admin.svg', import.meta.url).href;
+const aiBlogListImage = new URL('./assets/sites/ai-blog-list.svg', import.meta.url).href;
+const aiBlogProjectsImage = new URL('./assets/sites/ai-blog-projects.svg', import.meta.url).href;
+const stockholmAboutImage = new URL('./assets/sites/stockholm-about.svg', import.meta.url).href;
+const stockholmContactImage = new URL('./assets/sites/stockholm-contact.svg', import.meta.url).href;
 
 function websiteScreenshot(url: string, width: number, height: number) {
   const params = new URLSearchParams({
@@ -65,32 +76,39 @@ const services = [
     name: 'Websites & Landing Pages',
     description:
       'High-end websites and landing pages built around story, clarity, conversion, and a polished front-end experience.',
+    details: ['Conversion-focused structure', 'Responsive visual design', 'Frontend motion direction'],
   },
   {
     number: '02',
     name: 'Visual Branding',
     description:
       'Distinctive identity systems, typography, color, and art direction that help brands feel clear, memorable, and ownable.',
+    details: ['Logo and identity direction', 'Color and type systems', 'Brand usage guidance'],
   },
   {
     number: '03',
     name: 'Product Design',
     description:
       'Thoughtful interface design that turns complex products into intuitive, useful, and visually refined digital experiences.',
+    details: ['UX flows and wireframes', 'Interface design systems', 'Prototype-ready screens'],
   },
   {
     number: '04',
     name: 'Brand Systems',
     description:
       'Reusable visual systems for websites, campaigns, and product surfaces so every detail feels consistent and intentional.',
+    details: ['Reusable components', 'Launch-ready templates', 'Creative consistency checks'],
   },
   {
     number: '05',
     name: 'Motion & Interaction',
     description:
       'Smooth transitions, scroll rhythm, and micro-interactions that add craft without getting in the way of clarity.',
+    details: ['Scroll-based moments', 'Hover and tap states', 'Motion timing guidelines'],
   },
 ];
+
+
 
 const projects = [
   {
@@ -98,44 +116,28 @@ const projects = [
     category: 'Local Brand',
     name: 'Mamma Bakery',
     url: 'https://mammabakery.se/',
-    images: [
-      websiteScreenshot('https://mammabakery.se/', 1440, 900),
-      websiteScreenshot('https://mammabakery.se/', 390, 844),
-      websiteScreenshot('https://mammabakery.se/', 1680, 1200),
-    ],
+    images: [mammaOrderImage, mammaAdminImage, websiteScreenshot('https://mammabakery.se/', 1680, 2400)],
   },
   {
     number: '02',
     category: 'Editorial Blog',
     name: 'The AI Blog',
     url: 'https://roshanarun1991.github.io/The.AI.Blog/#blog',
-    images: [
-      websiteScreenshot('https://roshanarun1991.github.io/The.AI.Blog/#blog', 1440, 900),
-      websiteScreenshot('https://roshanarun1991.github.io/The.AI.Blog/#blog', 390, 844),
-      websiteScreenshot('https://roshanarun1991.github.io/The.AI.Blog/#blog', 1680, 1200),
-    ],
+    images: [aiBlogListImage, aiBlogProjectsImage, websiteScreenshot('https://roshanarun1991.github.io/The.AI.Blog/', 1680, 2400)],
   },
   {
     number: '03',
     category: 'Studio Presence',
     name: 'Stockholm Designs',
     url: 'https://www.stockholmdesigns.com/',
-    images: [
-      websiteScreenshot('https://www.stockholmdesigns.com/', 1440, 900),
-      websiteScreenshot('https://www.stockholmdesigns.com/', 390, 844),
-      websiteScreenshot('https://www.stockholmdesigns.com/', 1680, 1200),
-    ],
+    images: [stockholmAboutImage, stockholmContactImage, websiteScreenshot('https://www.stockholmdesigns.com/', 1680, 2400)],
   },
   {
     number: '04',
     category: 'AI Tool',
     name: 'AI SEO',
     url: 'https://ai-seo-91ee.onrender.com/',
-    images: [
-      websiteScreenshot('https://ai-seo-91ee.onrender.com/', 1440, 900),
-      websiteScreenshot('https://ai-seo-91ee.onrender.com/', 390, 844),
-      websiteScreenshot('https://ai-seo-91ee.onrender.com/', 1680, 1200),
-    ],
+    images: [aiSeoAuditImage, aiSeoPricingImage, aiSeoHeroImage],
   },
 ];
 function useMediaQuery(query: string) {
@@ -251,32 +253,27 @@ function Magnet({
 }
 
 function ContactButton() {
+  const [isOpening, setIsOpening] = useState(false);
+
+  function handleClick() {
+    setIsOpening(true);
+    window.setTimeout(() => setIsOpening(false), 1200);
+  }
+
   return (
     <motion.a
       href={contactHref}
+      onClick={handleClick}
       whileHover={{ scale: 1.04, y: -2 }}
       whileTap={{ scale: 0.96 }}
       className="inline-flex min-h-[44px] items-center justify-center gap-2 px-0 py-0 text-sm font-medium uppercase leading-[14px] tracking-normal text-[#E33529] transition duration-200 hover:opacity-80 focus-visible:border-b focus-visible:border-[#E33529] focus-visible:outline-none"
     >
-      Contact Me
-      <Send aria-hidden="true" size={18} strokeWidth={2.3} />
-    </motion.a>
-  );
-}
-
-function LiveProjectButton({ href = '#contact' }: { href?: string }) {
-  return (
-    <motion.a
-      href={href}
-      target={href.startsWith('http') ? '_blank' : undefined}
-      rel={href.startsWith('http') ? 'noreferrer' : undefined}
-      onClick={(event) => event.stopPropagation()}
-      whileHover={{ scale: 1.03, y: -2 }}
-      whileTap={{ scale: 0.96 }}
-      className="inline-flex min-h-[44px] items-center justify-center gap-2 px-0 py-0 font-serif text-base font-normal normal-case tracking-normal text-[#0000EE] transition duration-200 hover:text-[#007AFF] hover:opacity-70 focus-visible:border-b focus-visible:border-[#0000EE] focus-visible:outline-none"
-    >
-      Live Project
-      <ArrowUpRight aria-hidden="true" size={19} strokeWidth={2.4} />
+      <motion.span key={isOpening ? 'opening' : 'contact'} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.18 }}>
+        {isOpening ? 'Opening email...' : 'Contact Me'}
+      </motion.span>
+      <motion.span aria-hidden="true" animate={isOpening ? { x: [0, 4, 0], rotate: [0, 18, 0] } : { x: 0, rotate: 0 }} transition={{ duration: 0.42 }}>
+        <Send size={18} strokeWidth={2.3} />
+      </motion.span>
     </motion.a>
   );
 }
@@ -395,20 +392,26 @@ function MarqueeRow({ images, x }: { images: string[]; x: number }) {
 function AnimatedText({ text }: { text: string }) {
   const ref = useRef<HTMLParagraphElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.8', 'end 0.2'] });
+  const [activeWord, setActiveWord] = useState<number | null>(null);
   const words = text.split(' ');
   const total = words.reduce((sum, word) => sum + Array.from(word).length, 0);
   let characterIndex = 0;
 
   return (
-    <p ref={ref} className="max-w-[min(680px,92vw)] text-center font-serif text-[clamp(1rem,2vw,1.35rem)] font-normal leading-normal text-black">
+    <p
+      ref={ref}
+      onPointerLeave={() => setActiveWord(null)}
+      className="max-w-[min(680px,92vw)] text-center font-serif text-[clamp(1rem,2vw,1.35rem)] font-normal leading-normal text-black"
+    >
       {words.map((word, wordIndex) => {
         const letters = Array.from(word);
         const startIndex = characterIndex;
+        const isActive = activeWord !== null && Math.abs(activeWord - wordIndex) <= 1;
         characterIndex += letters.length;
 
         return (
-          <span key={`${word}-${wordIndex}`} className="inline whitespace-normal">
-            <span className="inline-block whitespace-nowrap">
+          <span key={`${word}-${wordIndex}`} className="inline whitespace-normal" onPointerEnter={() => setActiveWord(wordIndex)}>
+            <span className="inline-block whitespace-nowrap transition-transform duration-300" style={{ transform: isActive ? 'translateY(-1px)' : 'translateY(0)' }}>
               {letters.map((char, letterIndex) => (
                 <AnimatedCharacter
                   key={`${word}-${wordIndex}-${letterIndex}`}
@@ -416,6 +419,7 @@ function AnimatedText({ text }: { text: string }) {
                   index={startIndex + letterIndex}
                   total={total}
                   progress={scrollYProgress}
+                  active={isActive}
                 />
               ))}
             </span>
@@ -432,11 +436,13 @@ function AnimatedCharacter({
   index,
   total,
   progress,
+  active = false,
 }: {
   char: string;
   index: number;
   total: number;
   progress: MotionValue<number>;
+  active?: boolean;
 }) {
   const start = index / total;
   const end = Math.min(1, start + 0.16);
@@ -446,10 +452,274 @@ function AnimatedCharacter({
   return (
     <span className="relative inline-block">
       <span className="invisible">{displayChar}</span>
-      <motion.span className="absolute inset-0" style={{ opacity }}>
+      <motion.span
+        className="absolute inset-0"
+        style={{ opacity }}
+        animate={{
+          color: active ? '#E33529' : '#000000',
+          textShadow: active ? '0 0 18px rgba(227,53,41,0.22)' : '0 0 0 rgba(227,53,41,0)',
+        }}
+        transition={{ duration: 0.18 }}
+      >
         {displayChar}
       </motion.span>
     </span>
+  );
+}
+
+function CursorBasketball() {
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const sizeRef = useRef(112);
+  const activeRef = useRef(false);
+  const stateRef = useRef({ x: 0, y: 0, vx: 0, vy: 0, rotation: 0, impact: 0, waiting: true });
+  const [ballSize, setBallSize] = useState(112);
+
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotate = useMotionValue(0);
+  const opacity = useMotionValue(0);
+  const scaleX = useMotionValue(1);
+  const scaleY = useMotionValue(1);
+  const shadowX = useMotionValue(0);
+  const shadowY = useMotionValue(0);
+  const shadowWidth = useMotionValue(96);
+  const shadowScale = useMotionValue(1);
+  const shadowOpacity = useMotionValue(0);
+
+  useEffect(() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      opacity.set(0);
+      shadowOpacity.set(0);
+      return undefined;
+    }
+
+    let frame = 0;
+    let lastTime = performance.now();
+    let restartTimer: ReturnType<typeof window.setTimeout> | undefined;
+
+    const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+    const clearRestart = () => {
+      if (restartTimer) {
+        window.clearTimeout(restartTimer);
+        restartTimer = undefined;
+      }
+    };
+
+    const getBallSize = () => {
+      const width = stageRef.current?.getBoundingClientRect().width ?? window.innerWidth;
+      if (width < 640) return 72;
+      if (width < 1024) return 92;
+      return 112;
+    };
+
+    const getFloor = (height: number, size: number) => height - size - Math.max(42, height * 0.075);
+
+    const resetBall = () => {
+      const stage = stageRef.current;
+      if (!stage) return;
+      clearRestart();
+      const rect = stage.getBoundingClientRect();
+      const size = getBallSize();
+      sizeRef.current = size;
+      setBallSize(size);
+      const state = stateRef.current;
+      state.x = -size * 1.45;
+      state.y = Math.max(24, rect.height * 0.08);
+      state.vx = clamp(rect.width * 0.36, 430, 780);
+      state.vy = clamp(rect.height * 0.13, 90, 180);
+      state.rotation = -70;
+      state.impact = 0;
+      state.waiting = false;
+      lastTime = performance.now();
+      x.set(state.x);
+      y.set(state.y);
+      rotate.set(state.rotation);
+      opacity.set(0);
+      scaleX.set(1);
+      scaleY.set(1);
+      shadowOpacity.set(0);
+    };
+
+    const pauseBall = () => {
+      clearRestart();
+      activeRef.current = false;
+      stateRef.current.waiting = true;
+      opacity.set(0);
+      shadowOpacity.set(0);
+    };
+
+    const startBallLoop = () => {
+      activeRef.current = true;
+      resetBall();
+    };
+
+    const syncSize = () => {
+      const nextSize = getBallSize();
+      sizeRef.current = nextSize;
+      setBallSize(nextSize);
+      if (activeRef.current) resetBall();
+    };
+
+    const step = (time: number) => {
+      const stage = stageRef.current;
+      if (!stage) {
+        frame = window.requestAnimationFrame(step);
+        return;
+      }
+
+      if (!activeRef.current) {
+        lastTime = time;
+        frame = window.requestAnimationFrame(step);
+        return;
+      }
+
+      const rect = stage.getBoundingClientRect();
+      const size = sizeRef.current;
+      const state = stateRef.current;
+      const dt = clamp((time - lastTime) / 1000, 0.001, 0.032);
+      lastTime = time;
+
+      if (state.waiting) {
+        frame = window.requestAnimationFrame(step);
+        return;
+      }
+
+      const floor = getFloor(rect.height, size);
+      const gravity = clamp(rect.height * 2.35, 1500, 2450);
+      const restitution = 0.62;
+      const bounceFriction = 0.94;
+      const rollingFriction = 0.985;
+
+      state.vy += gravity * dt;
+      state.x += state.vx * dt;
+      state.y += state.vy * dt;
+
+      if (state.y >= floor) {
+        state.y = floor;
+        if (state.vy > 0) {
+          const hitSpeed = state.vy;
+          state.vx *= bounceFriction;
+          if (hitSpeed > 190) {
+            state.vy = -hitSpeed * restitution;
+            state.impact = clamp(hitSpeed / 1550, 0.16, 1);
+          } else {
+            state.vy = 0;
+          }
+        }
+        state.vx *= Math.pow(rollingFriction, dt * 60);
+      }
+
+      state.rotation += (state.vx * dt / Math.max(size * 0.48, 1)) * 57.2958;
+      state.impact = Math.max(0, state.impact - dt * 4.8);
+
+      const distanceFromFloor = Math.max(0, floor - state.y);
+      const floorCloseness = clamp(1 - distanceFromFloor / Math.max(rect.height * 0.45, 1), 0, 1);
+      const fadeIn = clamp((state.x + size * 1.45) / (size * 1.5), 0, 1);
+      const fadeOut = clamp((rect.width + size * 1.15 - state.x) / (size * 1.85), 0, 1);
+      const alpha = Math.min(fadeIn, fadeOut);
+      const impact = state.impact;
+
+      x.set(state.x);
+      y.set(state.y);
+      rotate.set(state.rotation);
+      opacity.set(alpha);
+      scaleX.set(1 + impact * 0.13);
+      scaleY.set(1 - impact * 0.18);
+      shadowX.set(state.x + size / 2);
+      shadowY.set(floor + size - 5);
+      shadowWidth.set(size * (0.62 + floorCloseness * 0.54 + impact * 0.18));
+      shadowScale.set(0.72 + floorCloseness * 0.5 + impact * 0.15);
+      shadowOpacity.set(alpha * (0.07 + floorCloseness * 0.26 + impact * 0.13));
+
+      if (state.x > rect.width + size * 1.6) {
+        state.waiting = true;
+        opacity.set(0);
+        shadowOpacity.set(0);
+        clearRestart();
+        restartTimer = window.setTimeout(() => {
+          if (activeRef.current) resetBall();
+        }, 700);
+      }
+
+      frame = window.requestAnimationFrame(step);
+    };
+
+    const resizeObserver = new ResizeObserver(syncSize);
+    if (stageRef.current) resizeObserver.observe(stageRef.current);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visible = entry.isIntersecting && entry.intersectionRatio >= 0.2;
+        if (visible && !activeRef.current) {
+          startBallLoop();
+        }
+        if (!visible && activeRef.current) {
+          pauseBall();
+        }
+      },
+      { threshold: [0, 0.2, 0.45] },
+    );
+
+    if (stageRef.current) observer.observe(stageRef.current);
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && activeRef.current) resetBall();
+    };
+
+    window.addEventListener('resize', syncSize);
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    frame = window.requestAnimationFrame(step);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      resizeObserver.disconnect();
+      observer.disconnect();
+      window.removeEventListener('resize', syncSize);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      clearRestart();
+    };
+  }, [opacity, rotate, scaleX, scaleY, shadowOpacity, shadowScale, shadowWidth, shadowX, shadowY, x, y]);
+
+  return (
+    <div ref={stageRef} className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+      <motion.div
+        className="absolute left-0 top-0 h-4 -translate-x-1/2 rounded-full bg-[#9b2b24]/20 blur-md"
+        style={{ x: shadowX, y: shadowY, width: shadowWidth, scaleX: shadowScale, opacity: shadowOpacity }}
+      />
+      <motion.div
+        className="absolute left-0 top-0 origin-bottom"
+        style={{ x, y, width: ballSize, height: ballSize, opacity, scaleX, scaleY }}
+      >
+        <motion.svg
+          viewBox="0 0 140 140"
+          className="h-full w-full drop-shadow-[rgba(99,30,24,0.24)_-8px_16px_22px]"
+          style={{ rotate }}
+        >
+          <defs>
+            <radialGradient id="basketball-gloss" cx="35%" cy="24%" r="78%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="24%" stopColor="#FBE9E7" />
+              <stop offset="54%" stopColor="#E33529" />
+              <stop offset="100%" stopColor="#8F1711" />
+            </radialGradient>
+            <linearGradient id="basketball-shade" x1="22" y1="18" x2="116" y2="122" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.45" />
+              <stop offset="52%" stopColor="#FFFFFF" stopOpacity="0" />
+              <stop offset="100%" stopColor="#000000" stopOpacity="0.2" />
+            </linearGradient>
+          </defs>
+          <circle cx="70" cy="70" r="58" fill="url(#basketball-gloss)" stroke="#C51F18" strokeWidth="7" />
+          <circle cx="70" cy="70" r="56" fill="url(#basketball-shade)" opacity="0.9" />
+          <path d="M16 72h108" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" opacity="0.95" />
+          <path d="M70 13c-18 25-18 88 0 114" stroke="#FFFFFF" strokeWidth="8" strokeLinecap="round" fill="none" opacity="0.95" />
+          <path d="M36 26c30 21 40 67 19 97" stroke="#B91D16" strokeWidth="5.5" strokeLinecap="round" fill="none" opacity="0.86" />
+          <path d="M104 26c-30 21-40 67-19 97" stroke="#B91D16" strokeWidth="5.5" strokeLinecap="round" fill="none" opacity="0.86" />
+          <path d="M27 32c18-16 49-22 78-9" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.64" />
+          <circle cx="49" cy="42" r="12" fill="#FFFFFF" opacity="0.52" />
+        </motion.svg>
+      </motion.div>
+    </div>
   );
 }
 
@@ -458,18 +728,7 @@ function AboutSection() {
 
   return (
     <section id="about" className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-[#F4CED3] px-4 py-20 text-black sm:px-8 md:min-h-screen md:px-10">
-      <FadeIn delay={0.1} duration={0.9} x={-80} y={0} className="pointer-events-none absolute top-[5%] left-[1%] w-[72px] opacity-55 sm:left-[2%] sm:w-[130px] sm:opacity-80 md:left-[4%] md:w-[210px] md:opacity-100">
-        <img src={decorativeImages.moon} alt="" loading="lazy" className="w-full object-contain" />
-      </FadeIn>
-      <FadeIn delay={0.25} duration={0.9} x={-80} y={0} className="pointer-events-none absolute bottom-[7%] left-[3%] w-[64px] opacity-45 sm:left-[6%] sm:w-[120px] sm:opacity-75 md:left-[10%] md:w-[180px] md:opacity-100">
-        <img src={decorativeImages.object} alt="" loading="lazy" className="w-full object-contain" />
-      </FadeIn>
-      <FadeIn delay={0.15} duration={0.9} x={80} y={0} className="pointer-events-none absolute top-[6%] right-[1%] w-[72px] opacity-55 sm:right-[2%] sm:w-[130px] sm:opacity-80 md:right-[4%] md:w-[210px] md:opacity-100">
-        <img src={decorativeImages.lego} alt="" loading="lazy" className="w-full object-contain" />
-      </FadeIn>
-      <FadeIn delay={0.3} duration={0.9} x={80} y={0} className="pointer-events-none absolute bottom-[7%] right-[3%] w-[76px] opacity-45 sm:right-[6%] sm:w-[140px] sm:opacity-75 md:right-[10%] md:w-[220px] md:opacity-100">
-        <img src={decorativeImages.group} alt="" loading="lazy" className="w-full object-contain" />
-      </FadeIn>
+      <CursorBasketball />
 
       <div className="relative z-10 flex w-full flex-col items-center gap-8 sm:gap-14 md:gap-16">
         <FadeIn as="h2" delay={0} y={40} className="hero-heading text-center text-[clamp(3.4rem,16vw,160px)] font-normal uppercase tracking-normal">
@@ -486,7 +745,57 @@ function AboutSection() {
 
 
 
+function ServiceCard({ service, index, active, onActivate }: { service: (typeof services)[number]; index: number; active: boolean; onActivate: () => void }) {
+  return (
+    <FadeIn delay={index * 0.1}>
+      <motion.button
+        type="button"
+        layout
+        onClick={onActivate}
+        onMouseEnter={onActivate}
+        onFocus={onActivate}
+        whileHover={{ y: -4 }}
+        whileTap={{ scale: 0.99 }}
+        className="group grid w-full gap-4 border-t border-[rgba(12,12,12,0.15)] py-7 text-left outline-none last:border-b sm:grid-cols-[0.8fr_1.8fr] sm:gap-10 sm:py-10 md:py-12"
+      >
+        <span className="font-bayon text-[clamp(3.4rem,18vw,140px)] font-normal leading-[0.78] text-[#E33529] transition duration-300 group-hover:translate-x-2">
+          {service.number}
+        </span>
+        <span className="flex flex-col justify-center gap-3">
+          <span className="flex items-center justify-between gap-6">
+            <span className="font-serif text-[clamp(1.25rem,2.2vw,2.1rem)] font-bold normal-case text-black">
+              {service.name}
+            </span>
+            <span className="hidden font-kanit text-sm font-medium uppercase leading-[14px] text-[#E33529] opacity-0 transition duration-300 group-hover:opacity-100 sm:inline">
+              {active ? 'Open' : 'View'}
+            </span>
+          </span>
+          <span className="max-w-2xl font-serif text-[clamp(1rem,1.6vw,1.25rem)] font-normal leading-normal text-black opacity-70">
+            {service.description}
+          </span>
+          <motion.span
+            initial={false}
+            animate={{ height: active ? 'auto' : 0, opacity: active ? 1 : 0 }}
+            transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+            className="overflow-hidden"
+          >
+            <span className="mt-4 grid gap-2 sm:grid-cols-3">
+              {service.details.map((detail) => (
+                <span key={detail} className="rounded-[4px] bg-[#F4CED3] px-3 py-3 font-kanit text-sm font-medium uppercase leading-[14px] text-[#E33529]">
+                  {detail}
+                </span>
+              ))}
+            </span>
+          </motion.span>
+        </span>
+      </motion.button>
+    </FadeIn>
+  );
+}
+
 function ServicesSection() {
+  const [activeService, setActiveService] = useState(0);
+
   return (
     <section id="services" className="bg-[#EDE2E2] px-4 py-16 text-black sm:px-8 sm:py-24 md:px-10 md:py-32">
       <FadeIn as="h2" className="mb-12 text-center font-bayon text-[clamp(3.4rem,16vw,160px)] font-normal uppercase leading-[0.78] text-[#E33529] sm:mb-20 md:mb-28">
@@ -494,23 +803,13 @@ function ServicesSection() {
       </FadeIn>
       <div className="mx-auto max-w-5xl">
         {services.map((service, index) => (
-          <FadeIn
+          <ServiceCard
             key={service.number}
-            delay={index * 0.1}
-            className="grid gap-4 border-t border-[rgba(12,12,12,0.15)] py-7 last:border-b sm:grid-cols-[0.8fr_1.8fr] sm:gap-10 sm:py-10 md:py-12"
-          >
-            <span className="font-bayon text-[clamp(3.4rem,18vw,140px)] font-normal leading-[0.78] text-[#E33529]">
-              {service.number}
-            </span>
-            <div className="flex flex-col justify-center gap-3">
-              <h3 className="font-serif text-[clamp(1.25rem,2.2vw,2.1rem)] font-bold normal-case text-black">
-                {service.name}
-              </h3>
-              <p className="max-w-2xl font-serif text-[clamp(1rem,1.6vw,1.25rem)] font-normal leading-normal text-black opacity-70">
-                {service.description}
-              </p>
-            </div>
-          </FadeIn>
+            service={service}
+            index={index}
+            active={activeService === index}
+            onActivate={() => setActiveService(index)}
+          />
         ))}
       </div>
     </section>
@@ -551,10 +850,56 @@ function ProjectCard({
   const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
   const imageDrift = useTransform(scrollYProgress, [0, 1], [34, -34]);
   const imageDriftReverse = useTransform(scrollYProgress, [0, 1], [-24, 24]);
+  const hoverTargetX = useMotionValue(0);
+  const hoverTargetY = useMotionValue(0);
+  const titleTargetX = useMotionValue(0);
+  const titleTargetY = useMotionValue(0);
+  const titleX = useSpring(titleTargetX, { stiffness: 120, damping: 18, mass: 0.5 });
+  const titleY = useSpring(titleTargetY, { stiffness: 120, damping: 18, mass: 0.5 });
+  const hoverX = useSpring(hoverTargetX, { stiffness: 90, damping: 20, mass: 0.7 });
+  const hoverY = useSpring(hoverTargetY, { stiffness: 90, damping: 20, mass: 0.7 });
+  const hoverXReverse = useTransform(hoverX, (value) => value * -0.7);
+  const hoverYReverse = useTransform(hoverY, (value) => value * -0.5);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isOpeningProject, setIsOpeningProject] = useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
+  const isMamma = project.name === 'Mamma Bakery';
+  const isAiBlog = project.name === 'The AI Blog';
+  const isStockholm = project.name === 'Stockholm Designs';
+  const isAiSeo = project.name === 'AI SEO';
+  const useFullFrameThumbnails = isMamma || isAiBlog || isStockholm || isAiSeo;
 
   function openProject() {
-    window.open(project.url, '_blank', 'noopener,noreferrer');
+    if (isOpeningProject) return;
+    setIsOpeningProject(true);
+    const nextWindow = window.open('about:blank', '_blank');
+    if (nextWindow) nextWindow.opener = null;
+    window.setTimeout(() => {
+      if (nextWindow) {
+        nextWindow.location.href = project.url;
+      } else {
+        window.open(project.url, '_blank', 'noopener,noreferrer');
+      }
+      setIsOpeningProject(false);
+    }, 280);
+  }
+
+  function handlePointerMove(event: React.PointerEvent<HTMLElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width - 0.5) * 28;
+    const y = ((event.clientY - rect.top) / rect.height - 0.5) * 22;
+    hoverTargetX.set(x);
+    hoverTargetY.set(y);
+    titleTargetX.set(x * 0.62);
+    titleTargetY.set(y * 0.5);
+  }
+
+  function handlePointerLeave() {
+    setIsHovered(false);
+    hoverTargetX.set(0);
+    hoverTargetY.set(0);
+    titleTargetX.set(0);
+    titleTargetY.set(0);
   }
 
   return (
@@ -568,36 +913,112 @@ function ProjectCard({
         role="link"
         tabIndex={0}
         onClick={openProject}
+        onPointerMove={handlePointerMove}
+        onPointerEnter={() => setIsHovered(true)}
+        onPointerLeave={handlePointerLeave}
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             openProject();
           }
         }}
-        className={(isDesktop ? "sticky " : "relative ") + "cursor-pointer overflow-hidden rounded-[4px] bg-[#F3F3F3] p-4 text-black shadow-[rgba(221,198,202,0.4)_-3px_4px_14px_0px] outline-none transition-shadow duration-300 hover:shadow-[rgba(221,198,202,0.62)_-6px_8px_24px_0px] focus-visible:ring-2 focus-visible:ring-[#E33529] sm:p-6 md:p-8"}
+        className={(isDesktop ? "sticky " : "relative ") + "group/project cursor-pointer overflow-hidden rounded-[4px] bg-[#F3F3F3] p-4 text-black shadow-[rgba(221,198,202,0.4)_-3px_4px_14px_0px] outline-none transition-shadow duration-300 hover:shadow-[rgba(221,198,202,0.62)_-6px_8px_24px_0px] focus-visible:ring-2 focus-visible:ring-[#E33529] sm:p-6 md:p-8"}
       >
-        <div className="mb-5 grid items-start gap-4 sm:grid-cols-[auto_1fr] sm:items-center md:mb-6 md:grid-cols-[0.8fr_0.75fr_1.35fr_auto] md:gap-6">
-          <span className="font-bayon text-[clamp(3.4rem,18vw,140px)] font-normal leading-[0.78] text-[#E33529]">
+        <div className="mb-5 grid items-start gap-4 sm:grid-cols-[auto_1fr] sm:items-center md:mb-6 md:gap-8">
+          <motion.span animate={isHovered ? { x: 6 } : { x: 0 }} transition={{ duration: 0.28 }} className="font-bayon text-[clamp(3.4rem,18vw,140px)] font-normal leading-[0.78] text-[#E33529]">
             {project.number}
-          </span>
-          <span className="grid min-h-[44px] items-center font-serif text-base font-normal normal-case text-[#0000EE] opacity-100 sm:text-base">
-            {project.category}
-          </span>
-          <h3 className="font-bayon text-[clamp(2.8rem,13vw,5.5rem)] font-normal uppercase leading-[0.78] tracking-normal text-black sm:col-span-2 md:col-span-1 md:text-[clamp(2.4rem,5vw,5.5rem)]">
+          </motion.span>
+          <motion.h3
+            style={{ x: titleX, y: titleY }}
+            animate={{ color: isHovered ? '#E33529' : '#000000' }}
+            transition={{ duration: 0.32, ease: [0.25, 0.1, 0.25, 1] }}
+            className="font-bayon text-[clamp(2.8rem,13vw,5.5rem)] font-normal uppercase leading-[0.78] tracking-normal md:text-[clamp(2.4rem,5vw,5.5rem)]"
+          >
             {project.name}
-          </h3>
-          <LiveProjectButton href={project.url} />
+          </motion.h3>
         </div>
 
-        <div className="grid gap-3 sm:gap-4 md:grid-cols-[40%_1fr] md:gap-5">
-          <div className="grid gap-3 sm:gap-4 md:gap-5">
-            <ProjectImage src={project.images[0]} alt={`${project.name} desktop screenshot`} className="h-[210px] sm:h-[clamp(130px,16vw,230px)]" motionY={imageDrift} />
-            <ProjectImage src={project.images[1]} alt={`${project.name} mobile screenshot`} className="h-[240px] sm:h-[clamp(160px,22vw,340px)]" motionY={imageDriftReverse} />
+        <motion.div
+          aria-hidden="true"
+          initial={false}
+          animate={{ opacity: isOpeningProject ? 1 : 0, scale: isOpeningProject ? 1 : 0.92 }}
+          transition={{ duration: 0.22, ease: [0.25, 0.1, 0.25, 1] }}
+          className="pointer-events-none absolute inset-0 z-20 grid place-items-center bg-[#F4CED3]/80 backdrop-blur-sm"
+        >
+          <span className="font-bayon text-[clamp(3rem,12vw,9rem)] uppercase leading-[0.78] text-[#E33529]">
+            Opening
+          </span>
+        </motion.div>
+
+        <div className="grid gap-3 sm:gap-4 md:grid-cols-[40%_1fr] md:items-start md:gap-5">
+          <div className={useFullFrameThumbnails ? "grid content-start gap-3 sm:gap-4 md:gap-4" : "grid gap-3 sm:gap-4 md:gap-5"}>
+            <ProjectImage src={project.images[0]} alt={`${project.name} desktop screenshot`} className={useFullFrameThumbnails ? "aspect-[16/9] h-auto" : "h-[210px] sm:h-[clamp(130px,16vw,230px)]"} motionY={useFullFrameThumbnails ? undefined : imageDrift} motionX={hoverX} fit={useFullFrameThumbnails ? 'contain-soft' : 'cover'} />
+            <ProjectImage src={project.images[1]} alt={`${project.name} mobile screenshot`} className={useFullFrameThumbnails ? "aspect-[16/9] h-auto" : "h-[240px] sm:h-[clamp(160px,22vw,340px)]"} motionY={useFullFrameThumbnails ? undefined : imageDriftReverse} motionX={hoverXReverse} fit={useFullFrameThumbnails ? 'contain-soft' : 'cover'} />
           </div>
-          <ProjectImage src={project.images[2]} alt={`${project.name} full website screenshot`} className="h-[300px] sm:h-[360px] md:h-full" motionY={imageDrift} />
+          <ProjectBrowserPreview project={project} motionX={hoverYReverse} isActive={isHovered} />
         </div>
       </motion.article>
     </div>
+  );
+}
+
+
+function ProjectBrowserPreview({
+  project,
+  motionX,
+  isActive,
+}: {
+  project: (typeof projects)[number];
+  motionX?: MotionValue<number>;
+  isActive: boolean;
+}) {
+  const previewClass =
+    project.name === 'AI SEO'
+      ? 'project-browser-image--contain'
+      : project.name === 'The AI Blog'
+        ? 'project-browser-image--blog'
+        : '';
+
+  return (
+    <motion.div
+      whileHover={{ scale: 0.992 }}
+      transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+      className="project-browser-preview relative flex h-[320px] flex-col overflow-hidden rounded-[4px] bg-[#F3F0EF] shadow-[rgba(221,198,202,0.4)_-3px_4px_14px_0px] sm:h-[390px] md:h-[clamp(420px,47vw,560px)]"
+    >
+      <div className="flex min-h-[34px] items-center justify-between border-b border-[#E33529]/15 bg-[#F3F3E9]/92 px-3 sm:min-h-[38px] sm:px-4">
+        <div className="flex items-center gap-1.5" aria-hidden="true">
+          <span className="h-2.5 w-2.5 rounded-full bg-[#E33529]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#F0B5BE]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#854720]/35" />
+        </div>
+        <span className="max-w-[58%] truncate font-serif text-sm text-black/55 sm:max-w-[64%]">
+          {project.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+        </span>
+        <motion.span
+          animate={isActive ? { x: 2, opacity: 1 } : { x: 0, opacity: 0.65 }}
+          className="font-bayon text-2xl leading-none text-[#E33529]"
+        >
+          OPEN
+        </motion.span>
+      </div>
+
+      <div className="relative flex-1 overflow-hidden bg-[#EDE2E2]">
+        <motion.img
+          src={project.images[2]}
+          alt={project.name + ' scrolling website preview'}
+          loading="lazy"
+          style={{ x: motionX }}
+          className={('project-browser-image ' + previewClass + ' w-full').trim()}
+        />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#F3F0EF]/90 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#F3F0EF]/95 to-transparent" />
+        <motion.div
+          className="pointer-events-none absolute right-3 top-12 h-16 w-[3px] rounded-full bg-[#E33529]"
+          animate={isActive ? { y: [0, 180, 0], opacity: [0.45, 0.9, 0.45] } : { y: 0, opacity: 0.32 }}
+          transition={{ duration: 5.8, repeat: Infinity, ease: [0.65, 0, 0.35, 1] }}
+        />
+      </div>
+    </motion.div>
   );
 }
 
@@ -606,46 +1027,126 @@ function ProjectImage({
   alt,
   className,
   motionY,
+  motionX,
+  fit = 'cover',
 }: {
   src: string;
   alt: string;
   className: string;
   motionY?: MotionValue<number>;
+  motionX?: MotionValue<number>;
+  fit?: 'cover' | 'contain' | 'contain-soft' | 'top-left';
 }) {
+  const imgClassName =
+    fit === 'contain'
+      ? 'h-full w-full object-contain p-3 sm:p-4'
+      : fit === 'contain-soft'
+        ? 'project-thumb-contain-motion h-full w-full object-contain'
+        : fit === 'top-left'
+        ? 'h-[108%] w-full object-cover object-left-top'
+        : 'h-[115%] w-full object-cover';
+
   return (
     <motion.div
       whileHover={{ scale: 0.985 }}
       transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-      className={`relative overflow-hidden rounded-[4px] bg-[#EDE2E2] shadow-[rgba(221,198,202,0.4)_-3px_4px_14px_0px] ${className}`}
+      className={'relative overflow-hidden rounded-[4px] bg-[#EDE2E2] shadow-[rgba(221,198,202,0.4)_-3px_4px_14px_0px] ' + className}
     >
       <motion.img
         src={src}
         alt={alt}
         loading="lazy"
-        style={{ y: motionY }}
-        whileHover={{ scale: 1.08 }}
+        style={{ y: motionY, x: motionX }}
+        whileHover={{ scale: fit === 'contain' || fit === 'contain-soft' ? 1.025 : 1.08 }}
         transition={{ duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
-        className="h-[115%] w-full object-cover"
+        className={imgClassName}
       />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(140deg,rgba(244,206,211,0.28),transparent_35%,rgba(227,53,41,0.08))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(140deg,rgba(244,206,211,0.28),transparent_35%,rgba(227,53,41,0.08))] opacity-80 transition duration-300 group-hover/project:opacity-100" />
     </motion.div>
+  );
+}
+
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 24, mass: 0.35 });
+
+  return (
+    <motion.div
+      aria-hidden="true"
+      className="fixed left-0 top-0 z-[80] h-[3px] w-full origin-left bg-[#E33529]"
+      style={{ scaleX }}
+    />
+  );
+}
+
+function CursorSpotlight() {
+  const targetX = useMotionValue(-320);
+  const targetY = useMotionValue(-320);
+  const x = useSpring(targetX, { stiffness: 90, damping: 24, mass: 0.8 });
+  const y = useSpring(targetY, { stiffness: 90, damping: 24, mass: 0.8 });
+
+  useEffect(() => {
+    const handlePointerMove = (event: PointerEvent) => {
+      targetX.set(event.clientX - 160);
+      targetY.set(event.clientY - 160);
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    return () => window.removeEventListener('pointermove', handlePointerMove);
+  }, [targetX, targetY]);
+
+  return (
+    <motion.div
+      aria-hidden="true"
+      className="pointer-events-none fixed left-0 top-0 z-[60] h-80 w-80 rounded-full opacity-45 mix-blend-multiply blur-3xl"
+      style={{
+        x,
+        y,
+        background: 'radial-gradient(circle, rgba(227,53,41,0.24) 0%, rgba(255,255,255,0.18) 42%, rgba(244,206,211,0) 72%)',
+      }}
+    />
   );
 }
 
 function App() {
   return (
     <main className="min-h-screen overflow-x-clip bg-[#F3F3E9] font-kanit text-black">
+      <ScrollProgress />
+      <CursorSpotlight />
       <HeroSection />
       <MarqueeSection />
       <AboutSection />
       <ServicesSection />
       <ProjectsSection />
-      <footer id="contact" className="bg-[#F4CED3] px-4 py-20 text-center text-black sm:px-8 sm:py-24 md:px-10">
+      <footer id="contact" className="relative overflow-hidden bg-[#F4CED3] px-4 py-20 text-center text-black sm:px-8 sm:py-24 md:px-10">
         <FadeIn className="mx-auto flex max-w-5xl flex-col items-center gap-10">
-          <h2 className="hero-heading text-[clamp(3.4rem,16vw,140px)] uppercase">
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
+            className="font-kanit text-sm font-medium uppercase leading-[14px] text-[#E33529]"
+          >
+            Available for thoughtful projects
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 42, scale: 0.98 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.35 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="hero-heading text-[clamp(3.4rem,16vw,140px)] uppercase"
+          >
             Let us build something considered
-          </h2>
-          <ContactButton />
+          </motion.h2>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.45 }}
+            transition={{ duration: 0.55, delay: 0.18, ease: [0.25, 0.1, 0.25, 1] }}
+            className="rounded-[4px] bg-[#F3F3E9]/70 px-5 py-2 shadow-[rgba(221,198,202,0.4)_-3px_4px_14px_0px]"
+          >
+            <ContactButton />
+          </motion.div>
         </FadeIn>
       </footer>
     </main>

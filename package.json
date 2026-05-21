@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 5177",
     "build": "tsc -b && vite build",
-    "preview": "vite preview --host 127.0.0.1 --port 5177"
+    "preview": "vite preview --host 127.0.0.1 --port 5177",
+    "sync": "node scripts/sync-github.cjs",
+    "watch:sync": "node scripts/watch-git-sync.cjs"
   },
   "dependencies": {
     "framer-motion": "^12.38.0",
